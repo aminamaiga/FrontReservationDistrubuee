@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Reservation";
+}
+@model FrontReservation.Models.Response
+
+<div class="row" style="margin-top: 30dp">
+    <form asp-controller="Home" asp-action="Index" method="get">
+        <div class="row form-inline">
+            Ville: <input type="text" name="ville" class="form-control" />&nbsp;&nbsp;
+            Nom Hotel: <input type="text" name="nomHotel" class="form-control" />&nbsp;&nbsp;
+            Catégorie: <input type="text" name="categorie" class="form-control" />&nbsp;&nbsp;
+        </div>
+        <p></p>
+        <div class="row form-inline">
+            nombre Personnes: <input type="number" name="nombrePersonne" class="form-control" />&nbsp;&nbsp;
+            Date départ: <input type="date" name="dateDepart" class="form-control" />&nbsp;&nbsp;
+            Date  arrivée: <input type="date" name="dateArrivee" class="form-control" />&nbsp;&nbsp;
+            <input type="submit" value="Rechercher" class="btn btn-info" />&nbsp;&nbsp;
+        </div>
+    </form>
+</div>
+@if (Model.Responses == null)
+{
+    <span class="alert alert-info">
+        Aucun Resultat trouvé pour votre recherche
+    </span>
+}
+@if (Model.Responses != null)
+{
+    <div class="row">
+        @foreach (var hotel in Model.Responses)
+        {
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem; margin-top: 8px;">
+                    <img class="card-img-top" src="@hotel.Chambres.PhotoPath" style="height: 50px; align-content: auto"/>
+                    <div class="card-body">
+                        <h5 class="card-title">@hotel.Agence</h5>
+                   
+                        <p>
+                            Nom @hotel.nomHotel
+                        </p>
+                        <p>
+                            Nombre Etoile @hotel.idCategorie
+                        </p>
+                        <p>
+                            Prix Chambre @hotel.Chambres.Prix
+                        </p>
+                        <p>
+                            GPS ( @hotel.Latitude @hotel.Longitude )
+                        </p>
+                        <p>
+                            Pays: @hotel.Pays
+                        </p>
+                        <p>
+                            Adresse: @hotel.Rue @hotel.Ville
+                        </p>
+                    @Html.ActionLink(
+              "Reserver",
+              "Reserver",
+              "Home",
+              new { hotel.Latitude, hotel.Longitude, hotel.Pays, hotel.IdHotel, hotel.nomHotel, hotel.Ville, hotel.idCategorie },         // action
+              new { @class = "btn btn-success" })
+                </div>
+                </div>
+            </div>
+    }
+        </div>
+
+    }
